@@ -1,0 +1,136 @@
+import java.util.Scanner;
+
+// Queue implementation using a static circular array with Generics
+class QueueWithStaticArray<T> {
+
+    int front;          // Index of the front element
+    int rear;           // Index of the rear element
+    final int size;     // Maximum size of the queue
+    T arr[];            // Array to store queue elements
+    int count;          // Number of elements currently in the queue
+
+    // Constructor
+    QueueWithStaticArray(int size) {
+        this.size = size;
+        this.front = 0;
+        this.rear = size - 1;
+        this.count = 0;
+        arr = (T[]) new Object[size]; // Create generic array
+    }
+
+    // Check if queue is empty
+    boolean isEmpty() {
+        return count == 0;
+    }
+
+    // Check if queue is full
+    boolean isFull() {
+        return count == size;
+    }
+
+    // Insert an element into the queue
+    void enQueue(T ele) {
+        if (isFull()) {
+            System.out.println("Queue is Full");
+            return;
+        }
+        rear = (rear + 1) % size;  // Circular increment
+        arr[rear] = ele;
+        count++;
+    }
+
+    // Remove an element from the queue
+    void deQueue() {
+        if (isEmpty()) {
+            System.out.println("Queue is Empty");
+            return;
+        }
+        front = (front + 1) % size; // Circular increment
+        count--;
+    }
+
+    // Get the front element
+    T getFront() {
+        if (isEmpty()) {
+            System.out.print("Queue is Empty ");
+            return null;
+        }
+        return arr[front];
+    }
+
+    // Get the rear element
+    T getRear() {
+        if (isEmpty()) {
+            System.out.println("Queue is Empty");
+            return null;
+        }
+        return arr[rear];
+    }
+
+    // Calculate current number of elements (without using count)
+    int getSize() {
+        if (isEmpty()) return 0;
+
+        if (rear >= front)
+            return (rear - front) + 1;
+        else
+            return (size - front) + (rear + 1);
+    }
+
+    // Search for an element and return its index
+    int search(T ele) {
+        if (isEmpty()) {
+            System.out.println("Queue is Empty");
+            return -1;
+        }
+
+        for (int i = front; i != rear; i = (i + 1) % size) {
+            if (arr[i] == ele)
+                return i;
+        }
+
+        if (arr[rear] == ele)
+            return rear;
+
+        return -1; // Element not found
+    }
+
+    // Clear the entire queue
+    void clear() {
+        if (isEmpty()) {
+            System.out.println("Queue is Empty");
+        } else {
+            arr = (T[]) new Object[size];
+            count = 0;
+            front = 0;
+            rear = size - 1;
+        }
+    }
+
+    // Print all elements in the queue
+    void print() {
+        if (isEmpty()) {
+            System.out.println("Queue is Empty");
+            return;
+        }
+
+        for (int i = front; i != rear; i = (i + 1) % size) {
+            System.out.print(arr[i] + " ");
+        }
+        System.out.println(arr[rear]);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Enter the size of queue:");
+        int N = sc.nextInt();
+
+        QueueWithStaticArray<Integer> queueWithStaticArray =
+                new QueueWithStaticArray<>(N);
+
+        // You can test your queue here
+    }
+}

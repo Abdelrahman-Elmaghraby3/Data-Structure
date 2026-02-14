@@ -1,0 +1,94 @@
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
+
+/*
+ * Generic Stack implementation using ArrayList
+ * Supports basic stack operations (LIFO)
+ */
+class Stack<T> {
+
+    // Internal storage for stack elements
+    // Made private to apply encapsulation
+    private ArrayList<T> items;
+
+    // Constructor: initializes the stack
+    public Stack() {
+        items = new ArrayList<>();
+    }
+
+    // Checks whether the stack is empty
+    // @return true if stack has no elements
+    boolean isEmpty() {
+        return items.isEmpty();
+    }
+
+    // Pushes an element onto the top of the stack
+    // @param item element to be added
+    void push(T item) {
+        items.add(item);
+    }
+
+    // Removes and returns the top element of the stack
+    // @return top element
+    // @throws NoSuchElementException if stack is empty
+    T pop() {
+        if (isEmpty()) {
+            throw new NoSuchElementException("Stack is Empty");
+        }
+        return items.remove(items.size() - 1);
+    }
+
+    // Returns the top element without removing it
+    // @return top element
+    // @throws NoSuchElementException if stack is empty
+    T peek() {
+        if (isEmpty()) {
+            throw new NoSuchElementException("Stack is Empty");
+        }
+        return items.get(items.size() - 1);
+    }
+
+    // Returns the number of elements in the stack
+    // @return stack size
+    public int size() {
+        return items.size();
+    }
+
+    // Prints stack elements from top to bottom
+    // Format: [top, ..., bottom]
+    public void print() {
+        if (isEmpty()) {
+            System.out.println("[]");
+            return;
+        }
+
+        System.out.print("[");
+        for (int i = items.size() - 1; i >= 0; i--) {
+            System.out.print(items.get(i));
+            if (i != 0) System.out.print(", ");
+        }
+        System.out.println("]");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        // Create a stack of integers
+        Stack<Integer> stack = new Stack<>();
+
+        // Push elements to the stack
+        stack.push(10);
+        stack.push(20);
+        stack.push(30);
+
+        // Remove the top element
+        stack.pop();
+
+        // View the top element
+        System.out.println(stack.peek());
+
+        // Print the stack
+        stack.print();
+    }
+}

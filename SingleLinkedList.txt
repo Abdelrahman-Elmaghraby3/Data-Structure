@@ -1,0 +1,224 @@
+public class SingleLinkedList  {
+
+    // length of the list
+    private int length;
+
+    // head -> first node , tail -> last node
+    private Node head;
+    private Node tail;
+
+    // Node class (each element in the list)
+    class Node {
+        int value;
+        Node next;
+
+        Node(int value){
+            this.value = value;
+        }
+    }
+
+    // constructor -> create list with one node
+    public SingleLinkedList(int value){
+        Node node = new Node(value);
+        head = node;
+        tail = node;
+        length = 1;
+    }
+
+    // getters
+    public Node getHead(){
+        return head;
+    }
+
+    public Node getTail(){
+        return tail;
+    }
+
+    public int getLength(){
+        return length;
+    }
+
+    // check if list is empty
+    public boolean isEmpty(){
+        return head == null;
+    }
+
+    // add element at the end
+    public void append(int value){
+        Node newNode = new Node(value);
+
+        if (isEmpty()){
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail.next = newNode;
+            tail = newNode;
+        }
+
+        length++;
+    }
+
+    // remove all elements
+    public void clearAll(){
+        head = null;
+        tail = null;
+        length = 0;
+    }
+
+    // remove last element
+    public Node removeLast(){
+        if (isEmpty()) return null;
+
+        // if only one element
+        if (length == 1){
+            Node temp = head;
+            head = null;
+            tail = null;
+            length--;
+            return temp;
+        }
+
+        Node current = head;
+        Node previous = head;
+
+        while (current.next != null){
+            previous = current;
+            current = current.next;
+        }
+
+        tail = previous;
+        tail.next = null;
+        length--;
+
+        return current;
+    }
+
+    // add element at the beginning
+    public void prepend(int value){
+        Node newNode = new Node(value);
+
+        if (isEmpty()){
+            head = newNode;
+            tail = newNode;
+        } else {
+            newNode.next = head;
+            head = newNode;
+        }
+
+        length++;
+    }
+
+    // remove first element
+    public Node removeFirst(){
+        if (isEmpty()) return null;
+
+        Node temp = head;
+        head = head.next;
+        temp.next = null;
+
+        length--;
+
+        if (length == 0) tail = null;
+
+        return temp;
+    }
+
+    // get node by index
+    public Node get(int index){
+        // index must be from 0 to length-1
+        if (index < 0 || index >= length) return null;
+
+        Node current = head;
+
+        while (index != 0){
+            current = current.next;
+            index--;
+        }
+
+        return current;
+    }
+
+    // update value at index
+    public boolean set(int index, int value){
+        Node temp = get(index);
+
+        if (temp != null){
+            temp.value = value;
+            return true;
+        }
+
+        return false;
+    }
+
+    // insert at specific index
+    public boolean insert(int index, int value){
+        if (index < 0 || index > length) return false;
+
+        if (index == 0){
+            prepend(value);
+            return true;
+        }
+
+        if (index == length){
+            append(value);
+            return true;
+        }
+
+        Node newNode = new Node(value);
+        Node prev = get(index - 1);
+
+        newNode.next = prev.next;
+        prev.next = newNode;
+
+        length++;
+        return true;
+    }
+
+    // remove node at index
+    public Node remove(int index){
+        if (index < 0 || index >= length) return null;
+
+        if (index == 0) return removeFirst();
+        if (index == length - 1) return removeLast();
+
+        Node prev = get(index - 1);
+        Node temp = prev.next;
+
+        prev.next = temp.next;
+        temp.next = null;
+
+        length--;
+
+        return temp;
+    }
+
+    // reverse the list
+    public void reverse(){
+        Node prev = null;
+        Node current = head;
+        Node next;
+
+        // swap head and tail
+        head = tail;
+        tail = current;
+
+        while (current != null){
+            next = current.next;   // save next node
+            current.next = prev;   // reverse pointer
+            prev = current;        // move prev forward
+            current = next;        // move current forward
+        }
+    }
+
+    // print all elements
+    public void printLinkedList(){
+        Node current = head;
+
+        while (current != null){
+            System.out.print(current.value + " ");
+            current = current.next;
+        }
+
+        System.out.println();
+    }
+}

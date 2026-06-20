@@ -1,29 +1,35 @@
+```java
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Graph {
 
-    // Adjacency List representation of the graph
-    // Key = Vertex
-    // Value = List of connected vertices
-    HashMap<String, ArrayList<String>> adjList = new HashMap<>();
+    /*
+     * Adjacency List representation of the graph.
+     *
+     * Key   -> Vertex
+     * Value -> List of connected vertices
+     */
+    private HashMap<String, ArrayList<String>> adjList = new HashMap<>();
 
 
-    // Print the entire graph
+    // Print the graph in a readable format
     public void printGraph() {
-        System.out.println(adjList);
+        for (String vertex : adjList.keySet()) {
+            System.out.println(vertex + " -> " + adjList.get(vertex));
+        }
     }
 
 
     // Add a new vertex to the graph
     public boolean addVertex(String vertex) {
 
-        // Check if the vertex does not already exist
+        // Vertex does not exist
         if (!adjList.containsKey(vertex)) {
-
-            // Create an empty neighbor list for the new vertex
             adjList.put(vertex, new ArrayList<>());
-
             return true;
         }
 
@@ -38,16 +44,12 @@ public class Graph {
         // Make sure both vertices exist
         if (adjList.containsKey(vertex1) && adjList.containsKey(vertex2)) {
 
-            // Add vertex2 to vertex1's neighbor list
             adjList.get(vertex1).add(vertex2);
-
-            // Add vertex1 to vertex2's neighbor list
             adjList.get(vertex2).add(vertex1);
 
             return true;
         }
 
-        // One or both vertices do not exist
         return false;
     }
 
@@ -58,16 +60,12 @@ public class Graph {
         // Make sure both vertices exist
         if (adjList.containsKey(vertex1) && adjList.containsKey(vertex2)) {
 
-            // Remove vertex2 from vertex1's neighbor list
             adjList.get(vertex1).remove(vertex2);
-
-            // Remove vertex1 from vertex2's neighbor list
             adjList.get(vertex2).remove(vertex1);
 
             return true;
         }
 
-        // One or both vertices do not exist
         return false;
     }
 
@@ -75,21 +73,85 @@ public class Graph {
     // Remove a vertex and all edges connected to it
     public boolean removeVertex(String vertex) {
 
-        // Check if the vertex exists
+        // Vertex does not exist
         if (!adjList.containsKey(vertex)) {
             return false;
         }
 
-        // Iterate through all neighboring vertices
+        // Remove this vertex from all neighboring vertices
         for (String neighbor : adjList.get(vertex)) {
-
-            // Remove the current vertex from each neighbor's list
             adjList.get(neighbor).remove(vertex);
         }
 
-        // Remove the vertex itself from the graph
+        // Remove the vertex itself
         adjList.remove(vertex);
 
         return true;
     }
+
+
+    /*
+     * Depth First Search (DFS)
+     *
+     * Uses recursion and explores as deep as possible
+     * before backtracking.
+     */
+    public void dfs(String vertex, HashSet<String> visited) {
+
+        // Mark the current vertex as visited
+        visited.add(vertex);
+
+        // Process the current vertex
+        System.out.print(vertex + " ");
+
+        // Visit all unvisited neighbors
+        for (String neighbor : adjList.get(vertex)) {
+
+            if (!visited.contains(neighbor)) {
+                dfs(neighbor, visited);
+            }
+        }
+    }
+
+
+    /*
+     * Breadth First Search (BFS)
+     *
+     * Uses a Queue and visits vertices level by level.
+     */
+    public void bfs(String startVertex) {
+
+        // Stores visited vertices
+        HashSet<String> visited = new HashSet<>();
+
+        // Queue used for BFS traversal
+        Queue<String> queue = new LinkedList<>();
+
+        // Visit the starting vertex
+        visited.add(startVertex);
+        queue.offer(startVertex);
+
+        while (!queue.isEmpty()) {
+
+            // Get the first vertex from the queue
+            String currentVertex = queue.poll();
+
+            // Process the current vertex
+            System.out.print(currentVertex + " ");
+
+            // Visit all neighbors of the current vertex
+            for (String neighbor : adjList.get(currentVertex)) {
+
+                if (!visited.contains(neighbor)) {
+
+                    // Mark neighbor as visited
+                    visited.add(neighbor);
+
+                    // Add neighbor to the queue
+                    queue.offer(neighbor);
+                }
+            }
+        }
+    }
 }
+```
